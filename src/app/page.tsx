@@ -1,5 +1,7 @@
 'use client';
 
+import { Button } from '@/components';
+
 export default function Home() {
   return (
     <div className='p-8 bg-white flex flex-col'>
@@ -8,9 +10,9 @@ export default function Home() {
           <span className='block'>Dive into your music.</span>
           <span className='block'>Share what you liked.</span>
         </h1>
-        <button className='bg-primary text-white px-6 py-3 rounded-full font-semibold'>
+        <Button variant='primary' size='lg'>
           Get Started
-        </button>
+        </Button>
       </div>
       <div className='flex flex-col items-center justify-center'>
         <h2 className='text-lg text-gray-900 font-semibold mb-4 text-center'>
@@ -31,9 +33,9 @@ export default function Home() {
           <span className='block'>Music is better together.</span>
           <span className='block'>Start sharing today.</span>
         </h2>
-        <button className='bg-primary text-white px-6 py-3 rounded-full font-semibold'>
+        <Button variant='primary' size='lg'>
           Get Started
-        </button>
+        </Button>
       </div>
     </div>
   );
