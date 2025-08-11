@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
@@ -8,7 +9,12 @@ export default function Footer() {
           {/* Brand Section */}
           <div className='col-span-1 md:col-span-2'>
             <Link href='/' className='text-2xl font-bold text-primary-400'>
-              Soundboxd
+              <Image
+                src='/logos/lightLogo.svg'
+                alt='Soundboxd'
+                width={150}
+                height={150}
+              />
             </Link>
             <p className='mt-4 text-gray-300 max-w-md'>
               Discover, track, and share your music journey. Connect with fellow

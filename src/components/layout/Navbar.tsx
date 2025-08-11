@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import Image from 'next/image';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -12,10 +13,14 @@ export default function Navbar() {
     <nav className='bg-white shadow-md border-b border-gray-200'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-16'>
-          {/* Logo/Brand */}
           <div className='flex-shrink-0'>
             <Link href='/' className='text-2xl font-bold text-primary-600'>
-              Soundboxd
+              <Image
+                src='/logos/darkLogo.svg'
+                alt='Soundboxd'
+                width={150}
+                height={150}
+              />
             </Link>
           </div>
 
@@ -82,7 +87,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className='md:hidden'>
             <div className='px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200'>
