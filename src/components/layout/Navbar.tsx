@@ -10,7 +10,7 @@ export default function Navbar() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <nav className='bg-white shadow-md border-b border-gray-200'>
+    <nav className='bg-white shadow-md border-b border-gray-200 sticky top-0 z-100'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='flex justify-between items-center h-16'>
           <div className='flex-shrink-0'>
