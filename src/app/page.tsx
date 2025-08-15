@@ -18,61 +18,80 @@ export default function Home() {
             </Button>
           </div>
 
-          <div className='absolute inset-0'>
-            <div className='absolute top-1/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
-              <MusicCard
-                id='1'
-                title='In Rainbows'
-                artist='Radiohead'
-                imageUrl='/static/albums/radiohead1.jpeg'
-                className='w-64 h-64'
-                variant='minimal'
-              />
+          <div className='absolute flex items-center justify-center top-1/8'>
+            <div className='flex items-center space-x-4'>
+              <div className='transform -rotate-12 scale-75 opacity-80'>
+                <MusicCard
+                  id='1'
+                  title='Kid A'
+                  artist='Radiohead'
+                  imageUrl='/static/albums/radiohead1.jpeg'
+                  className='w-32 h-32'
+                  variant='minimal'
+                />
+              </div>
+
+              <div className='transform -rotate-6 scale-90 opacity-90'>
+                <MusicCard
+                  id='2'
+                  title='OK Computer'
+                  artist='Radiohead'
+                  imageUrl='/static/albums/radiohead1.jpeg'
+                  className='w-40 h-40'
+                  variant='minimal'
+                />
+              </div>
+
+              <div className='transform scale-110 z-10'>
+                <MusicCard
+                  id='3'
+                  title='In Rainbows'
+                  artist='Radiohead'
+                  imageUrl='/static/albums/radiohead1.jpeg'
+                  className='w-56 h-56'
+                  variant='minimal'
+                />
+              </div>
+
+              <div className='transform rotate-6 scale-90 opacity-90'>
+                <MusicCard
+                  id='4'
+                  title='The Bends'
+                  artist='Radiohead'
+                  imageUrl='/static/albums/radiohead1.jpeg'
+                  className='w-40 h-40'
+                  variant='minimal'
+                />
+              </div>
+              <div className='transform rotate-12 scale-75 opacity-80'>
+                <MusicCard
+                  id='5'
+                  title='Amnesiac'
+                  artist='Radiohead'
+                  imageUrl='/static/albums/radiohead1.jpeg'
+                  className='w-32 h-32'
+                  variant='minimal'
+                />
+              </div>
             </div>
 
-            <div className='absolute top-1/5 left-2/9'>
-              <MusicCard
-                id='2'
-                title='OK Computer'
-                artist='Radiohead'
-                imageUrl='/static/albums/radiohead1.jpeg'
-                className='w-48 h-32'
-                variant='minimal'
-              />
-            </div>
-
-            <div className='absolute top-2/4 left-1/6'>
-              <MusicCard
-                id='3'
-                title='Kid A'
-                artist='Radiohead'
-                imageUrl='/static/albums/radiohead1.jpeg'
-                className='w-48 h-32'
-                variant='minimal'
-              />
-            </div>
-
-            <div className='absolute top-1/5 right-1/8'>
-              <MusicCard
-                id='4'
-                title='The Bends'
-                artist='Radiohead'
-                imageUrl='/static/albums/radiohead1.jpeg'
-                className='w-48 h-32'
-                variant='minimal'
-              />
-            </div>
-
-            <div className='absolute top-1/2 right-1/5'>
-              <MusicCard
-                id='5'
-                title='Amnesiac'
-                artist='Radiohead'
-                imageUrl='/static/albums/radiohead1.jpeg'
-                className='w-48 h-32'
-                variant='minimal'
-              />
-            </div>
+            {/* <div className='absolute left-8 top-1/2 transform -translate-y-1/2'>
+              <button className='w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-colors'>
+                <svg
+                  className='w-6 h-6 text-gray-700'
+                  fill='none'
+                  viewBox='0 0 24 24'
+                  stroke='currentColor'
+                >
+                  <path
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth={2}
+                    d='M15 19l-7-7 7-7'
+                  />
+                </svg>
+              </button>
+            </div> */}
           </div>
         </div>
         <div className='absolute -top-1/5 left-1/2 -translate-x-1/2 -translate-y-1 sm:-translate-y-2 sm:top-16% w-[800px] h-[800px] bg-gradient-to-r from-primary/60 via-primary/10 to-transparent rounded-full blur-3xl z-10 rotate-270' />
