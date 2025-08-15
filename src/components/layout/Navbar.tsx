@@ -24,7 +24,6 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <div className='hidden md:block'>
             <div className='ml-10 flex items-baseline space-x-4'>
               <Link
@@ -45,16 +44,9 @@ export default function Navbar() {
               >
                 Library
               </Link>
-              <Link
-                href='/profile'
-                className='text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors'
-              >
-                Profile
-              </Link>
             </div>
           </div>
 
-          {/* Mobile menu button */}
           <div className='md:hidden'>
             <button
               onClick={toggleMenu}
@@ -110,13 +102,6 @@ export default function Navbar() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Library
-              </Link>
-              <Link
-                href='/profile'
-                className='text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors'
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Profile
               </Link>
             </div>
           </div>

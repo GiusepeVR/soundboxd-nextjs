@@ -7,24 +7,73 @@ export default function Home() {
   return (
     <div className='p-8 bg-white flex flex-col overflow-hidden'>
       <div className='flex flex-col items-center justify-center h-screen relative'>
-        <h1 className='text-3xl text-gray-900 font-semibold mb-4 whitespace-pre-line text-center z-100'>
-          <span className='block'>Dive into your music.</span>
-          <span className='block'>Share what you liked.</span>
-        </h1>
-        <Button variant='primary' size='lg' className='z-100'>
-          Get Started
-        </Button>
-        <div className='grid grid-cols-2 gap-4 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50'>
-          <MusicCard
-            id='1'
-            title='Bohemian Rhapsody'
-            artist='Queen'
-            imageUrl='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop'
-            className=''
-          />
-          <MusicCard></MusicCard>
-          <MusicCard></MusicCard>
-          <MusicCard></MusicCard>
+        <div className='absolute inset-0 flex items-center justify-center z-50'>
+          <div className='text-center z-50'>
+            <h1 className='text-3xl text-gray-900 font-semibold mb-4 whitespace-pre-line'>
+              <span className='block'>Dive into your music.</span>
+              <span className='block'>Share what you liked.</span>
+            </h1>
+            <Button variant='primary' size='lg' className='z-50'>
+              Get Started
+            </Button>
+          </div>
+
+          <div className='absolute inset-0'>
+            <div className='absolute top-1/5 left-1/2 transform -translate-x-1/2 -translate-y-1/2'>
+              <MusicCard
+                id='1'
+                title='In Rainbows'
+                artist='Radiohead'
+                imageUrl='/static/albums/radiohead1.jpeg'
+                className='w-64 h-64'
+                variant='minimal'
+              />
+            </div>
+
+            <div className='absolute top-1/5 left-2/9'>
+              <MusicCard
+                id='2'
+                title='OK Computer'
+                artist='Radiohead'
+                imageUrl='/static/albums/radiohead1.jpeg'
+                className='w-48 h-32'
+                variant='minimal'
+              />
+            </div>
+
+            <div className='absolute top-2/4 left-1/6'>
+              <MusicCard
+                id='3'
+                title='Kid A'
+                artist='Radiohead'
+                imageUrl='/static/albums/radiohead1.jpeg'
+                className='w-48 h-32'
+                variant='minimal'
+              />
+            </div>
+
+            <div className='absolute top-1/5 right-1/8'>
+              <MusicCard
+                id='4'
+                title='The Bends'
+                artist='Radiohead'
+                imageUrl='/static/albums/radiohead1.jpeg'
+                className='w-48 h-32'
+                variant='minimal'
+              />
+            </div>
+
+            <div className='absolute top-1/2 right-1/5'>
+              <MusicCard
+                id='5'
+                title='Amnesiac'
+                artist='Radiohead'
+                imageUrl='/static/albums/radiohead1.jpeg'
+                className='w-48 h-32'
+                variant='minimal'
+              />
+            </div>
+          </div>
         </div>
         <div className='absolute -top-1/5 left-1/2 -translate-x-1/2 -translate-y-1 sm:-translate-y-2 sm:top-16% w-[800px] h-[800px] bg-gradient-to-r from-primary/60 via-primary/10 to-transparent rounded-full blur-3xl z-10 rotate-270' />
       </div>
@@ -46,55 +95,56 @@ export default function Home() {
             id='1'
             title='Bohemian Rhapsody'
             artist='Queen'
-            imageUrl='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop'
+            imageUrl='/static/albums/radiohead1.jpeg'
+            variant='default'
           />
           <MusicCard
             id='2'
             title='Hotel California'
             artist='Eagles'
-            imageUrl='https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=400&fit=crop'
+            imageUrl='/static/albums/radiohead1.jpeg'
           />
           <MusicCard
             id='3'
             title='Imagine'
             artist='John Lennon'
-            imageUrl='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop'
+            imageUrl='/static/albums/radiohead1.jpeg'
           />
           <MusicCard
             id='1'
             title='Bohemian Rhapsody'
             artist='Queen'
-            imageUrl='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop'
+            imageUrl='/static/albums/radiohead1.jpeg'
           />
           <MusicCard
             id='2'
             title='Hotel California'
             artist='Eagles'
-            imageUrl='https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=400&fit=crop'
+            imageUrl='/static/albums/radiohead1.jpeg'
           />
           <MusicCard
             id='3'
             title='Imagine'
             artist='John Lennon'
-            imageUrl='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop'
+            imageUrl='/static/albums/radiohead1.jpeg'
           />
           <MusicCard
             id='1'
             title='Bohemian Rhapsody'
             artist='Queen'
-            imageUrl='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop'
+            imageUrl='/static/albums/radiohead1.jpeg'
           />
           <MusicCard
             id='2'
             title='Hotel California'
             artist='Eagles'
-            imageUrl='https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=400&h=400&fit=crop'
+            imageUrl='/static/albums/radiohead1.jpeg'
           />
           <MusicCard
             id='3'
             title='Imagine'
             artist='John Lennon'
-            imageUrl='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop'
+            imageUrl='/static/albums/radiohead1.jpeg'
           />
         </div>
       </div>
