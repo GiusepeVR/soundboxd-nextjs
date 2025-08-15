@@ -22,9 +22,6 @@ export default function Home() {
             imageUrl='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop'
             className=''
           />
-          <MusicCard></MusicCard>
-          <MusicCard></MusicCard>
-          <MusicCard></MusicCard>
         </div>
         <div className='absolute -top-1/5 left-1/2 -translate-x-1/2 -translate-y-1 sm:-translate-y-2 sm:top-16% w-[800px] h-[800px] bg-gradient-to-r from-primary/60 via-primary/10 to-transparent rounded-full blur-3xl z-10 rotate-270' />
       </div>
