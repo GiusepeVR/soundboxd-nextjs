@@ -1,7 +1,6 @@
 'use client';
 
 import { Button, MusicCard } from '@/components';
-import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -74,24 +73,6 @@ export default function Home() {
                 />
               </div>
             </div>
-
-            {/* <div className='absolute left-8 top-1/2 transform -translate-y-1/2'>
-              <button className='w-12 h-12 bg-white/80 backdrop-blur-sm rounded-full shadow-lg flex items-center justify-center hover:bg-white transition-colors'>
-                <svg
-                  className='w-6 h-6 text-gray-700'
-                  fill='none'
-                  viewBox='0 0 24 24'
-                  stroke='currentColor'
-                >
-                  <path
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth={2}
-                    d='M15 19l-7-7 7-7'
-                  />
-                </svg>
-              </button>
-            </div> */}
           </div>
         </div>
         <div className='absolute -top-1/5 left-1/2 -translate-x-1/2 -translate-y-1 sm:-translate-y-2 sm:top-16% w-[800px] h-[800px] bg-gradient-to-r from-primary/60 via-primary/10 to-transparent rounded-full blur-3xl z-10 rotate-270' />
