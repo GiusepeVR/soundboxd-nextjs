@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import spotifyAuth from '@/utils/spotify';
+//import spotifyAuth from '@/utils/spotify';
 
 interface SpotifyUser {
   id: string;
@@ -69,13 +69,6 @@ export default function Dashboard() {
             <h1 className='text-xl font-semibold text-gray-900'>Soundboxd</h1>
             <div className='flex items-center space-x-4'>
               <div className='flex items-center space-x-3'>
-                {user.images?.[0] && (
-                  <img
-                    src={user.images[0].url}
-                    alt={user.display_name}
-                    className='w-8 h-8 rounded-full'
-                  />
-                )}
                 <span className='text-sm text-gray-700'>
                   {user.display_name}
                 </span>
@@ -129,7 +122,7 @@ export default function Dashboard() {
               Recently Played
             </h3>
             <p className='text-gray-600 mb-4'>
-              See what you've been listening to
+              See what you&apos;ve been listening to
             </p>
             <button className='w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition-colors'>
               View History

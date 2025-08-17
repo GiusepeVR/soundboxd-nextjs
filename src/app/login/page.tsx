@@ -2,11 +2,11 @@
 
 import { Button } from '@/components';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+//import { useRouter } from 'next/navigation';
 import spotifyAuth from '@/utils/spotify';
 
 export default function Login() {
-  const router = useRouter();
+  //const router = useRouter();
 
   const handleSpotifyLogin = () => {
     const authUrl = spotifyAuth.getAuthUrl();

@@ -1,20 +1,20 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import spotifyAuth from '@/utils/spotify';
+import { useRouter } from 'next/navigation';
 
 export default function AuthCallback() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        const code = searchParams.get('code');
-        const error = searchParams.get('error');
+        // Get URL parameters from the current URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const error = urlParams.get('error');
 
         if (error) {
           setError('Authorization was denied');
@@ -29,7 +29,19 @@ export default function AuthCallback() {
         }
 
         // Exchange code for tokens
-        const tokenData = await spotifyAuth.exchangeCodeForToken(code);
+        const response = await fetch('/api/auth/spotify/callback', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ code }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to exchange code for token');
+        }
+
+        const tokenData = await response.json();
 
         // Store tokens in localStorage (in production, use secure HTTP-only cookies)
         localStorage.setItem('spotify_access_token', tokenData.access_token);
@@ -40,7 +52,7 @@ export default function AuthCallback() {
           (Date.now() + tokenData.expires_in * 1000).toString()
         );
 
-        // Redirect to dashboard or home page
+        // Redirect to dashboard
         router.push('/dashboard');
       } catch (err) {
         console.error('Auth callback error:', err);
@@ -50,7 +62,7 @@ export default function AuthCallback() {
     };
 
     handleCallback();
-  }, [searchParams, router]);
+  }, [router]);
 
   if (isLoading) {
     return (

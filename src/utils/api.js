@@ -8,6 +8,7 @@ class API {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
+    return response.json();
   }
 }
 
