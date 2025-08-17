@@ -23,6 +23,7 @@
 # misc
 .DS_Store
 *.pem
+SPOTIFY_SETUP.md
 
 # debug
 npm-debug.log*

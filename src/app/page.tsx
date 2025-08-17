@@ -1,8 +1,11 @@
 'use client';
 
 import { Button, MusicCard } from '@/components';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <div className='p-8 bg-white flex flex-col overflow-hidden'>
       <div className='flex flex-col items-center justify-center h-screen relative'>
@@ -12,7 +15,12 @@ export default function Home() {
               <span className='block'>Dive into your music.</span>
               <span className='block'>Share what you liked.</span>
             </h1>
-            <Button variant='primary' size='lg' className='z-50'>
+            <Button
+              variant='primary'
+              size='lg'
+              className='z-50'
+              onClick={() => router.push('/login')}
+            >
               Get Started
             </Button>
           </div>
@@ -153,7 +161,12 @@ export default function Home() {
           <span className='block'>Music is better together.</span>
           <span className='block'>Start sharing today.</span>
         </h2>
-        <Button variant='primary' size='lg' className='z-100'>
+        <Button
+          variant='primary'
+          size='lg'
+          className='z-50'
+          onClick={() => router.push('/login')}
+        >
           Get Started
         </Button>
         <div className='absolute top-1/3 -left-24 w-96 h-96 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-full blur-3xl z-10' />
