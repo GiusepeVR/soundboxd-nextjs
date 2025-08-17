@@ -32,18 +32,6 @@ export default function Navbar() {
               >
                 Home
               </Link>
-              <Link
-                href='/discover'
-                className='text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors'
-              >
-                Discover
-              </Link>
-              <Link
-                href='/library'
-                className='text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors'
-              >
-                Library
-              </Link>
             </div>
           </div>
 
