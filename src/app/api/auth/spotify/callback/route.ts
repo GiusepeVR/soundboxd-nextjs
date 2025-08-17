@@ -11,10 +11,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const clientId = process.env.SPOTIFY_CLIENT_ID;
+    const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
     const redirectUri =
-      process.env.SPOTIFY_REDIRECT_URI || 'http://localhost:3000/auth/callback';
+      process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI ||
+      'http://localhost:3000/auth/callback';
 
     if (!clientId || !clientSecret) {
       return NextResponse.json(
