@@ -11,11 +11,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
+    const clientId = 'ec1ead665ba54a1c819788728c479239';
+    const redirectUri = 'https://www.soundboxd.online/auth/callback';
     const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-    const redirectUri =
-      process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI ||
-      'http://localhost:3000/auth/callback';
 
     if (!clientId || !clientSecret) {
       return NextResponse.json(
