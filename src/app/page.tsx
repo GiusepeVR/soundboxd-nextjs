@@ -2,9 +2,28 @@
 
 import { Button, MusicCard } from '@/components';
 import { useRouter } from 'next/navigation';
+import deezer from '@/utils/deezer';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
   const router = useRouter();
+  const [topFive, setTopFive] = useState([]);
+
+  useEffect(() => {
+    const fetchTopFive = async () => {
+      try {
+        const data = await deezer.getTopFive();
+        const albums = data?.albums?.data ?? [];
+        setTopFive(albums);
+      } catch (e) {
+        console.error('Failed to fetch Deezer top five:', e);
+        setTopFive([]);
+      }
+    };
+    fetchTopFive();
+  }, []);
+
+  const hasTopFive = topFive?.length >= 5;
 
   return (
     <div className='p-8 bg-white flex flex-col overflow-hidden'>
@@ -25,63 +44,55 @@ export default function Home() {
             </Button>
           </div>
 
-          <div className='absolute flex items-center justify-center top-1/8'>
-            <div className='flex items-center space-x-4'>
-              <div className='transform -rotate-12 scale-75 opacity-80'>
-                <MusicCard
-                  id='1'
-                  title='Kid A'
-                  artist='Radiohead'
-                  imageUrl='/static/albums/radiohead1.jpeg'
-                  className='w-32 h-32'
-                  variant='minimal'
-                />
-              </div>
+          {hasTopFive && (
+            <div className='absolute flex items-center justify-center top-1/8'>
+              <div className='flex items-center space-x-4'>
+                {topFive.slice(0, 5).map((album: any, index: number) => {
+                  const coverFlowConfig = [
+                    {
+                      wrapper: 'transform -rotate-12 scale-75 opacity-80',
+                      size: 'w-32 h-32',
+                    },
+                    {
+                      wrapper: 'transform -rotate-6 scale-90 opacity-90',
+                      size: 'w-40 h-40',
+                    },
+                    { wrapper: 'transform scale-110 z-10', size: 'w-56 h-56' },
+                    {
+                      wrapper: 'transform rotate-6 scale-90 opacity-90',
+                      size: 'w-40 h-40',
+                    },
+                    {
+                      wrapper: 'transform rotate-12 scale-75 opacity-80',
+                      size: 'w-32 h-32',
+                    },
+                  ];
+                  const cfg = coverFlowConfig[index] || coverFlowConfig[2];
+                  const imageUrl =
+                    album?.cover_big ||
+                    album?.cover_xl ||
+                    album?.cover_medium ||
+                    album?.cover;
+                  const title = album?.title || 'Unknown Album';
+                  const artist = album?.artist?.name || 'Unknown Artist';
+                  const id = String(album?.id ?? index);
 
-              <div className='transform -rotate-6 scale-90 opacity-90'>
-                <MusicCard
-                  id='2'
-                  title='OK Computer'
-                  artist='Radiohead'
-                  imageUrl='/static/albums/radiohead1.jpeg'
-                  className='w-40 h-40'
-                  variant='minimal'
-                />
-              </div>
-
-              <div className='transform scale-110 z-10'>
-                <MusicCard
-                  id='3'
-                  title='In Rainbows'
-                  artist='Radiohead'
-                  imageUrl='/static/albums/radiohead1.jpeg'
-                  className='w-56 h-56'
-                  variant='minimal'
-                />
-              </div>
-
-              <div className='transform rotate-6 scale-90 opacity-90'>
-                <MusicCard
-                  id='4'
-                  title='The Bends'
-                  artist='Radiohead'
-                  imageUrl='/static/albums/radiohead1.jpeg'
-                  className='w-40 h-40'
-                  variant='minimal'
-                />
-              </div>
-              <div className='transform rotate-12 scale-75 opacity-80'>
-                <MusicCard
-                  id='5'
-                  title='Amnesiac'
-                  artist='Radiohead'
-                  imageUrl='/static/albums/radiohead1.jpeg'
-                  className='w-32 h-32'
-                  variant='minimal'
-                />
+                  return (
+                    <div key={id} className={cfg.wrapper}>
+                      <MusicCard
+                        id={id}
+                        title={title}
+                        artist={artist}
+                        imageUrl={imageUrl}
+                        className={cfg.size}
+                        variant='minimal'
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </div>
-          </div>
+          )}
         </div>
         <div className='absolute -top-1/5 left-1/2 -translate-x-1/2 -translate-y-1 sm:-translate-y-2 sm:top-16% w-[800px] h-[800px] bg-gradient-to-r from-primary/60 via-primary/10 to-transparent rounded-full blur-3xl z-10 rotate-270' />
       </div>
@@ -92,11 +103,9 @@ export default function Home() {
         <ul className='flex flex-row text-gray-700 text-sm gap-4 mb-4'>
           <li>Pop</li>
           <li>Rock</li>
-          <li>Jazz</li>
-          <li>Classical</li>
           <li>Hip Hop</li>
           <li>Electronic</li>
-          <li>Country</li>
+          <li>Alternative</li>
         </ul>
         <div className='grid grid-cols-3 gap-4 py-4'>
           <MusicCard

@@ -2,20 +2,25 @@
 
 import { Button } from '@/components';
 import Link from 'next/link';
-//import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import spotifyAuth from '@/utils/spotify';
 
 export default function Login() {
-  //const router = useRouter();
+  const router = useRouter();
 
-  const handleSpotifyLogin = () => {
-    const authUrl = spotifyAuth.getAuthUrl();
-    window.location.href = authUrl;
+  const handleSpotifyLogin = async () => {
+    try {
+      const authUrl = await spotifyAuth.getAuthUrl();
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error('Failed to generate auth URL:', error);
+      // You could show an error message to the user here
+    }
   };
 
   return (
     <main className='flex flex-col items-center justify-center h-[80vh] bg-white'>
-      <div className='box-sizing-content flex flex-col items-center justify-center gap-6 border border-gray-300 rounded-md p-8 h-auto xxl:w-1/5 mx-3'>
+      <div className='box-sizing-content flex flex-col items-center justify-center gap-6 border border-gray-300 rounded-md p-8 h-auto xxl:w-1/5 xs:w-full'>
         <div className='text-center'>
           <h1 className='text-3xl text-gray-700 font-bold mb-2'>
             Welcome to Soundboxd

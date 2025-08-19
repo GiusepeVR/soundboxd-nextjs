@@ -2,41 +2,39 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { code } = await request.json();
+    const { code, code_verifier, redirect_uri } = await request.json();
 
-    if (!code) {
+    if (!code || !code_verifier) {
       return NextResponse.json(
-        { error: 'Authorization code is required' },
+        { error: 'Authorization code and code verifier are required' },
         { status: 400 }
       );
     }
 
+    // For PKCE flow, we don't need client secret - just client ID
     const clientId = 'ec1ead665ba54a1c819788728c479239';
-    const redirectUri = 'https://www.soundboxd.online/auth/callback';
-    const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
 
-    if (!clientId || !clientSecret) {
+    if (!clientId) {
       return NextResponse.json(
-        { error: 'Spotify credentials not configured' },
+        { error: 'Spotify client ID not configured' },
         { status: 500 }
       );
     }
 
-    // Exchange authorization code for access token
+    // Exchange authorization code for access token using PKCE
     const tokenResponse = await fetch(
       'https://accounts.spotify.com/api/token',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Authorization: `Basic ${Buffer.from(
-            `${clientId}:${clientSecret}`
-          ).toString('base64')}`,
         },
         body: new URLSearchParams({
           grant_type: 'authorization_code',
           code,
-          redirect_uri: redirectUri,
+          redirect_uri: redirect_uri || 'http://localhost:3000/auth/callback',
+          client_id: clientId,
+          code_verifier: code_verifier,
         }),
       }
     );
@@ -67,12 +65,6 @@ export async function POST(request: NextRequest) {
     }
 
     const profileData = await profileResponse.json();
-
-    // In a real app, you would:
-    // 1. Store tokens securely (encrypted in database)
-    // 2. Create or update user record
-    // 3. Set up session/cookies
-    // 4. Handle refresh token rotation
 
     return NextResponse.json({
       access_token: tokenData.access_token,
