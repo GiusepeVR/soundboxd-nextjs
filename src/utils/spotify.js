@@ -1,9 +1,7 @@
 class SpotifyAuth {
   constructor() {
-    this.clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID;
-    this.redirectUri =
-      process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI ||
-      'http://localhost:3000/auth/callback';
+    this.clientId = 'ec1ead665ba54a1c819788728c479239';
+    this.redirectUri = 'https://www.soundboxd.online/auth/callback';
     this.scope = [
       'user-read-private',
       'user-read-email',
