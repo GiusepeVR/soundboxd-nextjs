@@ -47,49 +47,66 @@ export default function Home() {
           {hasTopFive && (
             <div className='absolute flex items-center justify-center top-1/8'>
               <div className='flex items-center space-x-4'>
-                {topFive.slice(0, 5).map((album: any, index: number) => {
-                  const coverFlowConfig = [
-                    {
-                      wrapper: 'transform -rotate-12 scale-75 opacity-80',
-                      size: 'w-32 h-32',
+                {topFive.slice(0, 5).map(
+                  (
+                    album: {
+                      id?: number;
+                      title?: string;
+                      artist?: { name?: string };
+                      cover?: string;
+                      cover_medium?: string;
+                      cover_big?: string;
+                      cover_xl?: string;
                     },
-                    {
-                      wrapper: 'transform -rotate-6 scale-90 opacity-90',
-                      size: 'w-40 h-40',
-                    },
-                    { wrapper: 'transform scale-110 z-10', size: 'w-56 h-56' },
-                    {
-                      wrapper: 'transform rotate-6 scale-90 opacity-90',
-                      size: 'w-40 h-40',
-                    },
-                    {
-                      wrapper: 'transform rotate-12 scale-75 opacity-80',
-                      size: 'w-32 h-32',
-                    },
-                  ];
-                  const cfg = coverFlowConfig[index] || coverFlowConfig[2];
-                  const imageUrl =
-                    album?.cover_big ||
-                    album?.cover_xl ||
-                    album?.cover_medium ||
-                    album?.cover;
-                  const title = album?.title || 'Unknown Album';
-                  const artist = album?.artist?.name || 'Unknown Artist';
-                  const id = String(album?.id ?? index);
+                    index: number
+                  ) => {
+                    const coverFlowConfig = [
+                      {
+                        wrapper: 'transform -rotate-12 scale-75 opacity-80',
+                        size: 'w-32 h-32',
+                      },
+                      {
+                        wrapper: 'transform -rotate-6 scale-90 opacity-90',
+                        size: 'w-40 h-40',
+                      },
+                      {
+                        wrapper: 'transform scale-110 z-10',
+                        size: 'w-56 h-56',
+                      },
+                      {
+                        wrapper: 'transform rotate-6 scale-90 opacity-90',
+                        size: 'w-40 h-40',
+                      },
+                      {
+                        wrapper: 'transform rotate-12 scale-75 opacity-80',
+                        size: 'w-32 h-32',
+                      },
+                    ];
+                    const cfg = coverFlowConfig[index] || coverFlowConfig[2];
+                    const imageUrl =
+                      album?.cover_big ||
+                      album?.cover_xl ||
+                      album?.cover_medium ||
+                      album?.cover ||
+                      '/static/albums/fallback.jpeg';
+                    const title = album?.title || 'Unknown Album';
+                    const artist = album?.artist?.name || 'Unknown Artist';
+                    const id = String(album?.id ?? index);
 
-                  return (
-                    <div key={id} className={cfg.wrapper}>
-                      <MusicCard
-                        id={id}
-                        title={title}
-                        artist={artist}
-                        imageUrl={imageUrl}
-                        className={cfg.size}
-                        variant='minimal'
-                      />
-                    </div>
-                  );
-                })}
+                    return (
+                      <div key={id} className={cfg.wrapper}>
+                        <MusicCard
+                          id={id}
+                          title={title}
+                          artist={artist}
+                          imageUrl={imageUrl}
+                          className={cfg.size}
+                          variant='minimal'
+                        />
+                      </div>
+                    );
+                  }
+                )}
               </div>
             </div>
           )}

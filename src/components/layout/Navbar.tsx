@@ -18,8 +18,9 @@ export default function Navbar() {
               <Image
                 src='/logos/darkLogo.svg'
                 alt='Soundboxd'
+                className='w-100'
                 width={150}
-                height='150'
+                height={150}
               />
             </Link>
           </div>

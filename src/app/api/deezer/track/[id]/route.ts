@@ -1,11 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: Request, context: unknown) {
   try {
-    const trackId = params.id;
+    const { params } =
+      (context as { params?: { id?: string | string[] } }) ?? {};
+    const trackId = Array.isArray(params?.id) ? params?.id?.[0] : params?.id;
 
     if (!trackId) {
       return NextResponse.json(
