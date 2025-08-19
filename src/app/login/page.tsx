@@ -11,7 +11,6 @@ export default function Login() {
       window.location.href = authUrl;
     } catch (error) {
       console.error('Failed to generate auth URL:', error);
-      // You could show an error message to the user here
     }
   };
 
