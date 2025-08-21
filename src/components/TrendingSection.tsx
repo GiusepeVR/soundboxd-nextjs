@@ -77,6 +77,7 @@ export default function TrendingSection() {
               artist={track.artist.name}
               imageUrl={track.album.cover_medium}
               variant='default'
+              //className='w-[20%] h-[20%]'
             />
           ))}
         </div>

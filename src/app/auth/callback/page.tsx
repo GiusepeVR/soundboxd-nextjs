@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import spotifyAuth from '@/utils/spotify';
 
 export default function AuthCallback() {
   const router = useRouter();
@@ -29,28 +30,14 @@ export default function AuthCallback() {
         }
 
         // Exchange code for tokens
-        const response = await fetch('/api/auth/spotify/callback', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ code }),
-        });
+        const response = await spotifyAuth.exchangeCodeForToken(code);
+        console.log(code);
 
         if (!response.ok) {
           throw new Error('Failed to exchange code for token');
         }
 
-        const tokenData = await response.json();
-
-        // Store tokens in localStorage (in production, use secure HTTP-only cookies)
-        localStorage.setItem('spotify_access_token', tokenData.access_token);
-        localStorage.setItem('spotify_refresh_token', tokenData.refresh_token);
-        localStorage.setItem('spotify_user', JSON.stringify(tokenData.user));
-        localStorage.setItem(
-          'spotify_expires_at',
-          (Date.now() + tokenData.expires_in * 1000).toString()
-        );
+        //const tokenData = await response.json();
 
         // Redirect to dashboard
         router.push('/dashboard');

@@ -8,7 +8,8 @@ export default function Login() {
   const handleSpotifyLogin = async () => {
     try {
       const authUrl = await spotifyAuth.getAuthUrl();
-      window.location.href = authUrl;
+      //authUrl.search = new URLSearchParams(params).toString();
+      window.location.href = authUrl.toString();
     } catch (error) {
       console.error('Failed to generate auth URL:', error);
     }
