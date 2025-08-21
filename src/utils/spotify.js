@@ -1,16 +1,13 @@
 class SpotifyAuth {
   constructor() {
     this.clientId = 'ec1ead665ba54a1c819788728c479239';
-    this.redirectUri = 'https://www.soundboxd.online/auth/callback';
-    this.scope = [
-      'user-read-private',
-      'user-library-read',
-      'user-library-modify',
-    ].join(' ');
+    this.redirectUri = 'https://www.soundboxd.online/auth/spotify/callback';
+    this.scope = 'user-read-private user-read-email';
+    this.authURL = new URL('https://accounts.spotify.com/authorize');
   }
 
   // Generate PKCE code verifier and challenge
-  generatePKCE() {
+  async generatePKCE() {
     const generateRandomString = (length) => {
       const possible =
         'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
@@ -21,8 +18,8 @@ class SpotifyAuth {
       return text;
     };
 
-    const codeVerifier = generateRandomString(128);
-    const codeChallenge = this.base64URLEncode(sha256(codeVerifier));
+    const codeVerifier = generateRandomString(64);
+    const codeChallenge = this.base64URLEncode(await this.sha256(codeVerifier));
 
     return { codeVerifier, codeChallenge };
   }
@@ -30,9 +27,9 @@ class SpotifyAuth {
   // Base64URL encoding for PKCE
   base64URLEncode(str) {
     return btoa(String.fromCharCode.apply(null, new Uint8Array(str)))
+      .replace(/=/g, '')
       .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=+$/, '');
+      .replace(/\//g, '_');
   }
 
   // Simple SHA-256 implementation for PKCE
@@ -47,16 +44,15 @@ class SpotifyAuth {
     const { codeVerifier, codeChallenge } = await this.generatePKCE();
 
     // Store code verifier for later use
-    sessionStorage.setItem('spotify_code_verifier', codeVerifier);
+    window.localStorage.setItem('code_verifier', codeVerifier);
 
     const params = new URLSearchParams({
-      client_id: this.clientId,
       response_type: 'code',
-      redirect_uri: this.redirectUri,
+      client_id: this.clientId,
       scope: this.scope,
       code_challenge_method: 'S256',
       code_challenge: codeChallenge,
-      state: this.generateRandomString(16),
+      redirect_uri: this.redirectUri,
     });
 
     return `https://accounts.spotify.com/authorize?${params.toString()}`;
@@ -74,21 +70,23 @@ class SpotifyAuth {
 
   // Exchange authorization code for tokens using PKCE
   async exchangeCodeForToken(code) {
-    const codeVerifier = sessionStorage.getItem('spotify_code_verifier');
+    const codeVerifier = localStorage.getItem('code_verifier');
 
     if (!codeVerifier) {
       throw new Error('No code verifier found');
     }
 
-    const response = await fetch('/api/auth/spotify/callback', {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
       },
-      body: JSON.stringify({
+      body: new URLSearchParams({
+        client_id: clientId,
+        grant_type: 'authorization_code',
         code,
+        redirect_uri: redirectUri,
         code_verifier: codeVerifier,
-        redirect_uri: this.redirectUri,
       }),
     });
 
@@ -96,10 +94,8 @@ class SpotifyAuth {
       throw new Error('Failed to exchange code for token');
     }
 
-    // Clear the code verifier after successful exchange
-    sessionStorage.removeItem('spotify_code_verifier');
-
     const data = await response.json();
+    localStorage.setItem('access_token', response.access_token);
     return data;
   }
 
