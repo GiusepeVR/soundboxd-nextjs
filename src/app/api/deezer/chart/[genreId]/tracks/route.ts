@@ -3,10 +3,11 @@ import { NextResponse } from 'next/server';
 export async function GET(req: Request, context: unknown) {
   try {
     const { params } =
-      (context as { params?: { genreId?: string | string[] } }) ?? {};
-    const genreId = Array.isArray(params?.genreId)
-      ? params?.genreId?.[0]
-      : params?.genreId;
+      (context as { params?: Promise<{ genreId?: string | string[] }> }) ?? {};
+    const resolvedParams = await params;
+    const genreId = Array.isArray(resolvedParams?.genreId)
+      ? resolvedParams?.genreId?.[0]
+      : resolvedParams?.genreId;
 
     if (!genreId) {
       return NextResponse.json(
