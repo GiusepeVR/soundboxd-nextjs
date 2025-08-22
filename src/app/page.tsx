@@ -115,7 +115,7 @@ export default function Home() {
         </div>
         <div className='absolute -top-1/5 left-1/2 -translate-x-1/2 -translate-y-1 sm:-translate-y-2 sm:top-16% w-[800px] h-[800px] bg-gradient-to-r from-primary/60 via-primary/10 to-transparent rounded-full blur-3xl z-10 rotate-270' />
       </div>
-      <div className='flex flex-col items-center justify-center h-screen w-full relative'>
+      <div className='flex flex-col w-full relative py-8 sm:py-12 md:py-16 min-h-screen md:h-screen md:items-center md:justify-center'>
         <TrendingSection />
       </div>
 
