@@ -30,10 +30,30 @@ export async function GET(req: Request, context: unknown) {
     );
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error(
+        'Deezer API error for genre',
+        genreId,
+        ':',
+        response.status,
+        errorText
+      );
       throw new Error(`Deezer API responded with status: ${response.status}`);
     }
 
     const data = await response.json();
+    console.log('Deezer API: Received data for genre', genreId, ':', {
+      hasData: !!data?.data,
+      dataLength: data?.data?.length || 0,
+      firstTrack: data?.data?.[0]
+        ? {
+            id: data.data[0].id,
+            title: data.data[0].title,
+            hasArtist: !!data.data[0].artist,
+            hasAlbum: !!data.data[0].album,
+          }
+        : null,
+    });
 
     return NextResponse.json(data, {
       headers: {

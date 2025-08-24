@@ -1,31 +1,91 @@
 'use client';
 
-import { Button, MusicCard } from '@/components';
+import { useState, useEffect } from 'react';
+import { Button } from '@/components';
+import { MusicCard } from '@/components';
 import { useRouter } from 'next/navigation';
 import deezer from '@/utils/deezer';
-import { useEffect, useState } from 'react';
-import TrendingSection from '@/components/TrendingSection';
+
+interface Track {
+  id: number;
+  title: string;
+  artist: {
+    name: string;
+  };
+  album: {
+    title: string;
+    cover_medium: string;
+    cover_big?: string;
+    cover_xl?: string;
+  };
+  preview: string;
+}
+
+interface Album {
+  id?: number;
+  title?: string;
+  artist?: { name?: string };
+  cover?: string;
+  cover_medium?: string;
+  cover_big?: string;
+  cover_xl?: string;
+}
+
+const genres = ['Pop', 'Rock', 'Rap', 'Electronic', 'Alternative'];
 
 export default function Home() {
   const router = useRouter();
-  const [topFiveAlbums, setTopFiveAlbums] = useState([]);
+  const [topFiveAlbums, setTopFiveAlbums] = useState<Album[]>([]);
+  const [selectedGenre, setSelectedGenre] = useState('Pop');
+  const [trendingTracks, setTrendingTracks] = useState<Track[]>([]);
+  const [trendingLoading, setTrendingLoading] = useState(false);
 
-  const fetchTopFiveAlbums = async () => {
+  const hasTopFive = topFiveAlbums && topFiveAlbums.length >= 5;
+
+  const fetchTrendingTracks = async (genre: string) => {
+    setTrendingLoading(true);
     try {
-      const data = await deezer.getTopFive();
-      const albums = data?.albums?.data ?? [];
-      setTopFiveAlbums(albums);
-    } catch (e) {
-      console.error('Failed to fetch Deezer top five:', e);
-      setTopFiveAlbums([]);
+      const result = await deezer.getTopTracksByGenreName(genre);
+      if (
+        result?.data &&
+        Array.isArray(result.data) &&
+        result.data.length > 0
+      ) {
+        setTrendingTracks(result.data);
+      } else {
+        setTrendingTracks([]);
+      }
+    } catch (error) {
+      console.error('Error fetching trending tracks:', error);
+      setTrendingTracks([]);
+    } finally {
+      setTrendingLoading(false);
+    }
+  };
+
+  const handleGenreClick = (genre: string) => {
+    if (genre !== selectedGenre) {
+      setSelectedGenre(genre);
     }
   };
 
   useEffect(() => {
-    fetchTopFiveAlbums();
-  }, []);
+    fetchTrendingTracks(selectedGenre);
+  }, [selectedGenre]);
 
-  const hasTopFive = topFiveAlbums?.length >= 5;
+  useEffect(() => {
+    const fetchTopFive = async () => {
+      try {
+        const result = await deezer.getTopFive();
+        setTopFiveAlbums(result?.albums?.data || []);
+      } catch (error) {
+        console.error('Error fetching top charts:', error);
+        setTopFiveAlbums([]);
+      }
+    };
+
+    fetchTopFive();
+  }, []);
 
   return (
     <div className='p-8 bg-white flex flex-col overflow-hidden'>
@@ -115,8 +175,74 @@ export default function Home() {
         </div>
         <div className='absolute -top-1/5 left-1/2 -translate-x-1/2 -translate-y-1 sm:-translate-y-2 sm:top-16% w-[800px] h-[800px] bg-gradient-to-r from-primary/60 via-primary/10 to-transparent rounded-full blur-3xl z-10 rotate-270' />
       </div>
-      <div className='flex flex-col w-full relative py-8 sm:py-12 md:py-16 min-h-screen md:h-screen md:items-center md:justify-center'>
-        <TrendingSection />
+      <div className='flex flex-col w-full relative py-8 sm:py-12 md:py-16'>
+        <div className='max-w-6xl mx-auto p-6 w-full'>
+          <h2 className='text-3xl text-gray-900 font-semibold whitespace-pre-line mb-6'>
+            Now Trending
+          </h2>
+
+          <ul className='flex flex-row text-gray-700 text-sm gap-4 mb-4 overflow-x-auto'>
+            {genres.map((genre) => (
+              <li
+                key={genre}
+                onClick={() => handleGenreClick(genre)}
+                className={`cursor-pointer hover:text-primary transition-colors whitespace-nowrap ${
+                  selectedGenre === genre
+                    ? 'text-primary font-semibold border-b-2 border-primary pb-1'
+                    : ''
+                }`}
+              >
+                {genre}
+              </li>
+            ))}
+          </ul>
+
+          <div className='min-h-[400px] h-auto xl:overflow-hidden'>
+            {trendingLoading ? (
+              <div className='flex justify-center py-8'>
+                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+              </div>
+            ) : (
+              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-4 w-full xl:max-w-full'>
+                {trendingTracks
+                  .slice(0, 9)
+                  .map((track) => {
+                    // Defensive check for required track properties
+                    if (
+                      !track?.id ||
+                      !track?.title ||
+                      !track?.artist?.name ||
+                      !track?.album?.cover_medium
+                    ) {
+                      return null;
+                    }
+
+                    const imageUrl =
+                      track.album.cover_big ||
+                      track.album.cover_xl ||
+                      track.album.cover_medium;
+
+                    return (
+                      <div
+                        key={track.id}
+                        className='w-full xl:max-w-full xl:flex-shrink-0'
+                      >
+                        <MusicCard
+                          id={String(track.id)}
+                          title={track.title}
+                          artist={track.artist.name}
+                          imageUrl={imageUrl}
+                          variant='default'
+                          className='w-full xl:h-full'
+                        />
+                      </div>
+                    );
+                  })
+                  .filter(Boolean)}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <div className='flex flex-col items-center justify-center h-screen relative'>
