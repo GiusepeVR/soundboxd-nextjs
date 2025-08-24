@@ -9,7 +9,7 @@ class DeezerAPI {
   GENRE_IDS = {
     pop: 132,
     rock: 152,
-    'hip hop': 116,
+    rap: 116,
     electronic: 106,
     alternative: 85,
   };

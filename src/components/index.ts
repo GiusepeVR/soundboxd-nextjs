@@ -8,6 +8,3 @@ export { default as Input } from './ui/Input';
 
 // Card Components
 export { default as MusicCard } from './cards/MusicCard';
-
-// Feature Components
-export { default as TrendingSection } from './TrendingSection';
