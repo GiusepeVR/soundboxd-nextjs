@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         body: new URLSearchParams({
           grant_type: 'authorization_code',
           code,
-          redirect_uri: 'https://www.soundboxd.online/auth/spotify/callback',
+          redirect_uri: 'https://www.soundboxd.online/auth/callback',
           client_id: clientId,
           code_verifier: code_verifier,
         }),
