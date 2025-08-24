@@ -1,89 +1,95 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) {
+const clientId = 'ec1ead665ba54a1c819788728c479239';
+const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
+const redirectUri = 'https://www.soundboxd.online/auth/callback';
+
+export async function GET(request: NextRequest) {
   try {
-    const { code, code_verifier, redirect_uri } = await request.json();
+    const { searchParams } = new URL(request.url);
+    const code = searchParams.get('code');
+    const state = searchParams.get('state');
+    const error = searchParams.get('error');
 
-    if (!code || !code_verifier) {
-      return NextResponse.json(
-        { error: 'Authorization code and code verifier are required' },
-        { status: 400 }
+    // Get the stored state from cookies
+    const storedState = request.cookies.get('spotify_state')?.value;
+
+    if (error) {
+      return NextResponse.redirect(
+        new URL('/login?error=access_denied', request.url)
       );
     }
 
-    // For PKCE flow, we don't need client secret - just client ID
-    const clientId = 'ec1ead665ba54a1c819788728c479239';
-
-    if (!clientId) {
-      return NextResponse.json(
-        { error: 'Spotify client ID not configured' },
-        { status: 500 }
+    if (!code || !state) {
+      return NextResponse.redirect(
+        new URL('/login?error=missing_params', request.url)
       );
     }
 
-    // Exchange authorization code for access token using PKCE
+    // Verify state parameter to prevent CSRF attacks
+    if (state !== storedState) {
+      return NextResponse.redirect(
+        new URL('/login?error=invalid_state', request.url)
+      );
+    }
+
+    // Exchange authorization code for access token
     const tokenResponse = await fetch(
       'https://accounts.spotify.com/api/token',
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
+          Authorization: `Basic ${Buffer.from(
+            `${clientId}:${clientSecret}`
+          ).toString('base64')}`,
         },
         body: new URLSearchParams({
           grant_type: 'authorization_code',
           code,
-          redirect_uri: 'https://www.soundboxd.online/auth/callback',
-          client_id: clientId,
-          code_verifier: code_verifier,
+          redirect_uri: redirectUri,
         }),
       }
     );
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.text();
-      console.error('Spotify token exchange failed:', errorData);
-      return NextResponse.json(
-        { error: 'Failed to exchange authorization code' },
-        { status: 400 }
+      console.error('Token exchange failed:', errorData);
+      return NextResponse.redirect(
+        new URL('/login?error=token_exchange_failed', request.url)
       );
     }
 
     const tokenData = await tokenResponse.json();
 
-    // Get user profile
-    const profileResponse = await fetch('https://api.spotify.com/v1/me', {
-      headers: {
-        Authorization: `Bearer ${tokenData.access_token}`,
-      },
+    // Redirect to dashboard with success
+    const response = NextResponse.redirect(new URL('/dashboard', request.url));
+
+    // Clear the state cookie
+    response.cookies.delete('spotify_state');
+
+    // Store tokens in secure cookies (you might want to store these in a database instead)
+    response.cookies.set('spotify_access_token', tokenData.access_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: tokenData.expires_in,
     });
 
-    if (!profileResponse.ok) {
-      return NextResponse.json(
-        { error: 'Failed to fetch user profile' },
-        { status: 400 }
-      );
+    if (tokenData.refresh_token) {
+      response.cookies.set('spotify_refresh_token', tokenData.refresh_token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 60 * 60 * 24 * 30, // 30 days
+      });
     }
 
-    const profileData = await profileResponse.json();
-
-    return NextResponse.json({
-      access_token: tokenData.access_token,
-      refresh_token: tokenData.refresh_token,
-      expires_in: tokenData.expires_in,
-      user: {
-        id: profileData.id,
-        display_name: profileData.display_name,
-        email: profileData.email,
-        images: profileData.images,
-        country: profileData.country,
-        product: profileData.product,
-      },
-    });
+    return response;
   } catch (error) {
     console.error('Spotify callback error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+    return NextResponse.redirect(
+      new URL('/login?error=server_error', request.url)
     );
   }
 }
