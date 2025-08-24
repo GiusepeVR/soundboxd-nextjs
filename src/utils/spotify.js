@@ -1,9 +1,20 @@
 class SpotifyAuth {
   constructor() {
     this.clientId = 'ec1ead665ba54a1c819788728c479239';
-    this.redirectUri = 'https://www.soundboxd.online/auth/spotify/callback';
-    this.scope = 'user-read-private user-read-email';
-    this.authURL = new URL('https://accounts.spotify.com/authorize');
+    this.redirectUri = 'https://www.soundboxd.online/auth/callback';
+    this.scope = [
+      'user-read-private',
+      'user-read-email',
+      'user-read-playback-state',
+      'user-modify-playback-state',
+      'user-read-currently-playing',
+      'playlist-read-private',
+      'playlist-read-collaborative',
+      'playlist-modify-public',
+      'playlist-modify-private',
+      'user-library-read',
+      'user-library-modify',
+    ].join(' ');
   }
 
   // Generate PKCE code verifier and challenge
@@ -47,8 +58,9 @@ class SpotifyAuth {
     window.localStorage.setItem('code_verifier', codeVerifier);
 
     const params = new URLSearchParams({
-      response_type: 'code',
       client_id: this.clientId,
+      response_type: 'code',
+      redirect_uri: this.redirectUri,
       scope: this.scope,
       code_challenge_method: 'S256',
       code_challenge: codeChallenge,
@@ -85,8 +97,8 @@ class SpotifyAuth {
         client_id: clientId,
         grant_type: 'authorization_code',
         code,
-        redirect_uri: redirectUri,
         code_verifier: codeVerifier,
+        redirect_uri: this.redirectUri,
       }),
     });
 
