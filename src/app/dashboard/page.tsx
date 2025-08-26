@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import spotifyAuth from '@/utils/spotify';
+import { MusicCard } from '@/components';
 
 interface SpotifyUser {
   id: string;
@@ -17,7 +18,11 @@ interface RecentlyPlayedResponse {
   items: Array<{
     track: {
       name: string;
+      id: string;
       artists: Array<{ name: string }>;
+      album: {
+        images: Array<{ url: string; height: number; width: number }>;
+      };
     };
     played_at: string;
   }>;
@@ -29,7 +34,6 @@ export default function Dashboard() {
   const [userRecentlyPlayed, setUserRecentlyPlayed] =
     useState<RecentlyPlayedResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [topTenRecentTracks, setTopTenRecentTracks] = useState(null);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -52,7 +56,7 @@ export default function Dashboard() {
         accessToken
       );
       setUserRecentlyPlayed(recentlyPlayedData);
-      setTopTenRecentTracks(recentlyPlayedData.items.slice(0, 10));
+      console.log(recentlyPlayedData);
       setIsLoading(false);
     };
 
@@ -83,7 +87,7 @@ export default function Dashboard() {
 
   return (
     <div className='min-h-screen bg-white'>
-      <nav className='bg-white shadow-sm border-b border-gray-200'>
+      {/* <nav className='bg-white shadow-sm border-b border-gray-200'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex justify-between items-center h-16'>
             <h1 className='text-xl font-semibold text-gray-900'>Soundboxd</h1>
@@ -102,7 +106,7 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-      </nav>
+      </nav> */}
 
       <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white'>
         <div className='text-center mb-12'>
@@ -122,14 +126,23 @@ export default function Dashboard() {
             <p className='text-gray-600 mb-4'>
               See what you&apos;ve been listening to
             </p>
-            {userRecentlyPlayed?.items &&
-            userRecentlyPlayed.items.length > 0 ? (
-              <p className='text-gray-600 mb-4'>
-                {userRecentlyPlayed.items[0].track?.name || 'Unknown track'}
-              </p>
-            ) : (
-              <p className='text-gray-600 mb-4'>No recently played tracks</p>
-            )}
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 py-4 w-full xl:max-w-full'>
+              {userRecentlyPlayed?.items &&
+                userRecentlyPlayed.items.map((item) => {
+                  return (
+                    <div className='text-gray-600 mb-4' key={item.track.id}>
+                      <MusicCard
+                        id={String(item.track.id)}
+                        title={item.track.name}
+                        artist='{item.track.artist.name}'
+                        imageUrl={item.track.album.images[0]?.url || ''}
+                        variant='minimal'
+                        className='w-full xl:h-full'
+                      />
+                    </div>
+                  );
+                })}
+            </div>
           </div>
         </div>
       </main>
