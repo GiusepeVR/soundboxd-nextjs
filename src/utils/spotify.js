@@ -6,7 +6,7 @@ class SpotifyAuth {
         ? process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_DEV ||
           'http://127.0.0.1:3000/auth/callback'
         : process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_PROD ||
-          'https://yourdomain.com/auth/callback';
+          'https://www.soundboxd.online/auth/callback';
     this.scope = [
       'user-read-private',
       'user-read-recently-played',
