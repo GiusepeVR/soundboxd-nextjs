@@ -92,27 +92,31 @@ export default function Navbar() {
         {isMenuOpen && (
           <div className='md:hidden'>
             <div className='px-2 pt-2 pb-3 space-y-1 sm:px-3 border-t border-gray-200'>
-              <Link
-                href='/'
-                className='text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors'
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                href='/discover'
-                className='text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors'
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Discover
-              </Link>
-              <Link
-                href='/library'
-                className='text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors'
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Library
-              </Link>
+              {!isUserLoggedIn && (
+                <Link
+                  href='/login'
+                  className='text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors'
+                >
+                  Sign in
+                </Link>
+              )}
+              {isUserLoggedIn && (
+                <Link
+                  href='/dashboard'
+                  className='text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors'
+                >
+                  My music
+                </Link>
+              )}
+              {isUserLoggedIn && (
+                <Link
+                  href='/'
+                  className='text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors'
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Link>
+              )}
             </div>
           </div>
         )}
