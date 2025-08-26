@@ -9,7 +9,8 @@ export default function Login() {
     try {
       const authUrl = await spotifyAuth.getAuthUrl();
       //authUrl.search = new URLSearchParams(params).toString();
-      window.location.href = authUrl.toString();
+      //window.location.href = 'https://4dc95aa07e8a.ngrok-free.app/login';
+      window.location.href = authUrl;
     } catch (error) {
       console.error('Failed to generate auth URL:', error);
     }

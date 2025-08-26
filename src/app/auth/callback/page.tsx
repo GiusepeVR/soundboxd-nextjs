@@ -14,6 +14,7 @@ export default function AuthCallback() {
       try {
         // Get URL parameters from the current URL
         const urlParams = new URLSearchParams(window.location.search);
+
         const code = urlParams.get('code');
         const error = urlParams.get('error');
 
@@ -35,7 +36,6 @@ export default function AuthCallback() {
         // Store tokens in localStorage (in production, use secure HTTP-only cookies)
         localStorage.setItem('spotify_access_token', tokenData.access_token);
         localStorage.setItem('spotify_refresh_token', tokenData.refresh_token);
-        localStorage.setItem('spotify_user', JSON.stringify(tokenData.user));
         localStorage.setItem(
           'spotify_expires_at',
           (Date.now() + tokenData.expires_in * 1000).toString()

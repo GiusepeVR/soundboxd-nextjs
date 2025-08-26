@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-//import spotifyAuth from '@/utils/spotify';
+import spotifyAuth from '@/utils/spotify';
+import { MusicCard } from '@/components';
 
 interface SpotifyUser {
   id: string;
@@ -13,33 +14,56 @@ interface SpotifyUser {
   product: string;
 }
 
+interface RecentlyPlayedResponse {
+  items: Array<{
+    track: {
+      name: string;
+      id: string;
+      artists: Array<{ name: string }>;
+      album: {
+        images: Array<{ url: string; height: number; width: number }>;
+      };
+    };
+    played_at: string;
+  }>;
+}
+
 export default function Dashboard() {
   const router = useRouter();
   const [user, setUser] = useState<SpotifyUser | null>(null);
+  const [userRecentlyPlayed, setUserRecentlyPlayed] =
+    useState<RecentlyPlayedResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
       const accessToken = localStorage.getItem('spotify_access_token');
-      const userData = localStorage.getItem('spotify_user');
 
-      if (!accessToken || !userData) {
+      if (!accessToken) {
         router.push('/login');
         return;
       }
 
       try {
-        const user = JSON.parse(userData);
-        setUser(user);
-        setIsLoading(false);
+        const userData = await spotifyAuth.getUserProfile(accessToken);
+        setUser(userData);
       } catch (error) {
-        console.error('Error parsing user data:', error);
+        console.error('Error obtaining user data:', error);
         router.push('/login');
       }
+
+      const recentlyPlayedData = await spotifyAuth.getRecentlyPlayed(
+        accessToken
+      );
+      setUserRecentlyPlayed(recentlyPlayedData);
+      console.log(recentlyPlayedData);
+      setIsLoading(false);
     };
 
     checkAuth();
   }, [router]);
+
+  useEffect(() => {});
 
   const handleLogout = () => {
     localStorage.removeItem('spotify_access_token');
@@ -63,7 +87,7 @@ export default function Dashboard() {
 
   return (
     <div className='min-h-screen bg-white'>
-      <nav className='bg-white shadow-sm border-b border-gray-200'>
+      {/* <nav className='bg-white shadow-sm border-b border-gray-200'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex justify-between items-center h-16'>
             <h1 className='text-xl font-semibold text-gray-900'>Soundboxd</h1>
@@ -82,9 +106,9 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-      </nav>
+      </nav> */}
 
-      <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8'>
+      <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white'>
         <div className='text-center mb-12'>
           <h2 className='text-3xl font-bold text-gray-900 mb-4'>
             Welcome back, {user.display_name}! 🎵
@@ -94,29 +118,7 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-          <div className='bg-white p-6 rounded-lg border border-gray-200 shadow-sm'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-2'>
-              Your Library
-            </h3>
-            <p className='text-gray-600 mb-4'>
-              Access your saved songs and albums
-            </p>
-            <button className='w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition-colors'>
-              View Library
-            </button>
-          </div>
-
-          <div className='bg-white p-6 rounded-lg border border-gray-200 shadow-sm'>
-            <h3 className='text-lg font-semibold text-gray-900 mb-2'>
-              Playlists
-            </h3>
-            <p className='text-gray-600 mb-4'>Manage and discover playlists</p>
-            <button className='w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition-colors'>
-              Browse Playlists
-            </button>
-          </div>
-
+        <div className='flex flex-col gap-3'>
           <div className='bg-white p-6 rounded-lg border border-gray-200 shadow-sm'>
             <h3 className='text-lg font-semibold text-gray-900 mb-2'>
               Recently Played
@@ -124,9 +126,23 @@ export default function Dashboard() {
             <p className='text-gray-600 mb-4'>
               See what you&apos;ve been listening to
             </p>
-            <button className='w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition-colors'>
-              View History
-            </button>
+            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 py-4 w-full xl:max-w-full'>
+              {userRecentlyPlayed?.items &&
+                userRecentlyPlayed.items.map((item) => {
+                  return (
+                    <div className='text-gray-600 mb-4' key={item.track.id}>
+                      <MusicCard
+                        id={String(item.track.id)}
+                        title={item.track.name}
+                        artist='{item.track.artist.name}'
+                        imageUrl={item.track.album.images[0]?.url || ''}
+                        variant='minimal'
+                        className='w-full xl:h-full'
+                      />
+                    </div>
+                  );
+                })}
+            </div>
           </div>
         </div>
       </main>
