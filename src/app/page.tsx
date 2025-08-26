@@ -207,7 +207,6 @@ export default function Home() {
                 {trendingTracks
                   .slice(0, 9)
                   .map((track) => {
-                    // Defensive check for required track properties
                     if (
                       !track?.id ||
                       !track?.title ||
