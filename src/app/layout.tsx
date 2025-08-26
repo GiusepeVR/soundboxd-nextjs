@@ -3,6 +3,7 @@ import { Outfit } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
+import { UserProvider } from '@/components/context/UserContext';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -19,9 +20,11 @@ export default function RootLayout({
     <html lang='en' className={outfit.variable}>
       <body className={outfit.className}>
         <div className='min-h-screen flex flex-col'>
-          <Navbar />
-          <main className='flex-1'>{children}</main>
-          <Footer />
+          <UserProvider>
+            <Navbar />
+            <main className='flex-1'>{children}</main>
+            <Footer />
+          </UserProvider>
         </div>
       </body>
     </html>

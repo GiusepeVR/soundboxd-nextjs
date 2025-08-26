@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import spotifyAuth from '@/utils/spotify';
 import { MusicCard } from '@/components';
+import { useUser } from '@/components/context/UserContext';
 
 interface SpotifyUser {
   id: string;
@@ -34,6 +35,7 @@ export default function Dashboard() {
   const [userRecentlyPlayed, setUserRecentlyPlayed] =
     useState<RecentlyPlayedResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { setIsUserLoggedIn } = useUser();
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -58,20 +60,13 @@ export default function Dashboard() {
       setUserRecentlyPlayed(recentlyPlayedData);
       console.log(recentlyPlayedData);
       setIsLoading(false);
+      setIsUserLoggedIn(true);
     };
 
     checkAuth();
   }, [router]);
 
   useEffect(() => {});
-
-  const handleLogout = () => {
-    localStorage.removeItem('spotify_access_token');
-    localStorage.removeItem('spotify_refresh_token');
-    localStorage.removeItem('spotify_user');
-    localStorage.removeItem('spotify_expires_at');
-    router.push('/');
-  };
 
   if (isLoading) {
     return (
