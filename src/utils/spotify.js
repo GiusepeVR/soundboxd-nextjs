@@ -1,7 +1,12 @@
 class SpotifyAuth {
   constructor() {
     this.clientId = 'ec1ead665ba54a1c819788728c479239';
-    this.redirectUri = 'http://127.0.0.1:3000/auth/callback';
+    this.redirectUri =
+      process.env.NODE_ENV === 'development'
+        ? process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_DEV ||
+          'http://127.0.0.1:3000/auth/callback'
+        : process.env.NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_PROD ||
+          'https://yourdomain.com/auth/callback';
     this.scope = [
       'user-read-private',
       'user-read-recently-played',
