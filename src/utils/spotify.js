@@ -1,9 +1,10 @@
 class SpotifyAuth {
   constructor() {
     this.clientId = 'ec1ead665ba54a1c819788728c479239';
-    this.redirectUri = 'https://www.soundboxd.online/auth/callback';
+    this.redirectUri = 'http://127.0.0.1:3000/auth/callback';
     this.scope = [
       'user-read-private',
+      'user-read-recently-played',
       'user-read-email',
       'user-read-playback-state',
       'user-modify-playback-state',
@@ -53,9 +54,7 @@ class SpotifyAuth {
   // Get authorization URL with PKCE
   async getAuthUrl() {
     const { codeVerifier, codeChallenge } = await this.generatePKCE();
-
-    // Store code verifier for later use
-    window.localStorage.setItem('code_verifier', codeVerifier);
+    localStorage.setItem('code_verifier', codeVerifier);
 
     const params = new URLSearchParams({
       client_id: this.clientId,
@@ -94,7 +93,7 @@ class SpotifyAuth {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: new URLSearchParams({
-        client_id: clientId,
+        client_id: this.clientId,
         grant_type: 'authorization_code',
         code,
         code_verifier: codeVerifier,
@@ -107,7 +106,6 @@ class SpotifyAuth {
     }
 
     const data = await response.json();
-    localStorage.setItem('access_token', response.access_token);
     return data;
   }
 
