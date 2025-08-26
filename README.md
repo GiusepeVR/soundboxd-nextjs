@@ -18,6 +18,18 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
+## Environment Variables
+
+To use this application with Spotify, you need to set up environment variables. Create a `.env.local` file in the root directory with the following variables:
+
+```bash
+# Spotify Configuration
+NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_DEV=http://127.0.0.1:3000/auth/callback
+NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_PROD=https://yourdomain.com/auth/callback
+```
+
+**Note:** Replace `https://yourdomain.com` with your actual production domain when deploying.
+
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 ## Learn More
