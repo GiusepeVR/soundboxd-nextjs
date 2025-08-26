@@ -82,38 +82,18 @@ export default function Dashboard() {
 
   return (
     <div className='min-h-screen bg-white'>
-      {/* <nav className='bg-white shadow-sm border-b border-gray-200'>
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
-          <div className='flex justify-between items-center h-16'>
-            <h1 className='text-xl font-semibold text-gray-900'>Soundboxd</h1>
-            <div className='flex items-center space-x-4'>
-              <div className='flex items-center space-x-3'>
-                <span className='text-sm text-gray-700'>
-                  {user.display_name}
-                </span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className='text-sm text-gray-600 hover:text-gray-900'
-              >
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav> */}
-
       <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white'>
-        <div className='text-center mb-12'>
+        <div className='flex flex-col justify-center mb-12 relative text-center w-full'>
           <h2 className='text-3xl font-bold text-gray-900 mb-4'>
-            Welcome back, {user.display_name}! 🎵
+            Welcome back, {user.display_name}!
           </h2>
           <p className='text-lg text-gray-600'>
             Your Spotify account is now connected to Soundboxd
           </p>
+          <div className='absolute m-0 p-0 -top-[20px] left-1/2 -translate-x-1/2 -translate-y-1  w-[150px] h-[300px] bg-gradient-to-r from-primary/60 via-primary/10 to-transparent rounded-full blur-3xl rotate-270 z-10' />
         </div>
 
-        <div className='flex flex-col gap-3'>
+        <div className='flex flex-col gap-3 bg-white relative z-100'>
           <div className='bg-white p-6 rounded-lg border border-gray-200 shadow-sm'>
             <h3 className='text-lg font-semibold text-gray-900 mb-2'>
               Recently Played
