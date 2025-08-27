@@ -13,6 +13,7 @@ export default function Footer() {
                 alt='Soundboxd'
                 width={150}
                 height={150}
+                className='w-[150px] h-auto'
               />
             </Link>
             <p className='mt-4 text-gray-300 max-w-md'>
