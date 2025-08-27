@@ -85,7 +85,7 @@ export default function Dashboard() {
       <main className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white'>
         <div className='flex flex-col justify-center mb-12 relative text-center w-full'>
           <h2 className='text-3xl font-bold text-gray-900 mb-4'>
-            Welcome back, {user.display_name}!
+            Welcome, {user.display_name}!
           </h2>
           <p className='text-lg text-gray-600'>
             Your Spotify account is now connected to Soundboxd
@@ -109,7 +109,9 @@ export default function Dashboard() {
                       <MusicCard
                         id={String(item.track.id)}
                         title={item.track.name}
-                        artist='{item.track.artist.name}'
+                        artist={item.track.artists
+                          .map((a) => a.name)
+                          .join(', ')}
                         imageUrl={item.track.album.images[0]?.url || ''}
                         variant='minimal'
                         className='w-full xl:h-full'

@@ -20,9 +20,9 @@ export default function Navbar() {
               <Image
                 src='/logos/darkLogo.svg'
                 alt='Soundboxd'
-                className='w-full h-auto'
                 width={150}
                 height={150}
+                className='w-[150px] h-auto'
               />
             </Link>
           </div>
@@ -95,7 +95,8 @@ export default function Navbar() {
               {!isUserLoggedIn && (
                 <Link
                   href='/login'
-                  className='text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors'
+                  className='text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-sm font-medium transition-colors'
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   Sign in
                 </Link>
@@ -103,7 +104,8 @@ export default function Navbar() {
               {isUserLoggedIn && (
                 <Link
                   href='/dashboard'
-                  className='text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors'
+                  className='text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-sm font-medium transition-colors'
+                  onClick={() => setIsMenuOpen(false)}
                 >
                   My music
                 </Link>
@@ -111,8 +113,11 @@ export default function Navbar() {
               {isUserLoggedIn && (
                 <Link
                   href='/'
-                  className='text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors'
-                  onClick={handleLogout}
+                  className='text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-sm font-medium transition-colors'
+                  onClick={() => {
+                    handleLogout();
+                    setIsMenuOpen(false);
+                  }}
                 >
                   Logout
                 </Link>

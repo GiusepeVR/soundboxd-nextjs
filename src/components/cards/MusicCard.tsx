@@ -19,8 +19,8 @@ export default function MusicCard({
   variant = 'default',
 }: MusicCardProps) {
   const renderMinimal = () => (
-    <div className={`relative ${className}`}>
-      <Link href={`/music/${id}`} className='block'>
+    <div className={`relative group ${className}`}>
+      <Link href={``} className='block'>
         <div className='relative aspect-square overflow-hidden rounded-lg'>
           <Image
             src={imageUrl}
@@ -28,6 +28,11 @@ export default function MusicCard({
             fill
             className='object-cover'
           />
+
+          <div className='absolute flex flex-col justify-end bg-black/60 p-4 w-full h-full opacity-0 hover:opacity-100 transition-opacity duration-200 group-hover:opacity-100'>
+            <span className='block text-white mb-2 truncate'>{title}</span>
+            <span className='block text-white text-sm truncate'>{artist}</span>
+          </div>
         </div>
       </Link>
     </div>
