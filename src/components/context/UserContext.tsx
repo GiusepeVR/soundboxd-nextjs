@@ -19,7 +19,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('spotify_refresh_token');
     localStorage.removeItem('spotify_user');
     localStorage.removeItem('spotify_expires_at');
-    setIsUserLoggedIn(false); // This will trigger navbar re-render
+    setIsUserLoggedIn(false);
     router.push('/');
   };
 
