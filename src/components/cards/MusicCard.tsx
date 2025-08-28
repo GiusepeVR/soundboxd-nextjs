@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
 interface MusicCardProps {
   id: string;
@@ -19,8 +18,8 @@ export default function MusicCard({
   variant = 'default',
 }: MusicCardProps) {
   const renderMinimal = () => (
-    <div className={`relative group ${className}`}>
-      <Link href={``} className='block'>
+    <div className={`relative group cursor-pointer ${className}`}>
+      <div className='block'>
         <div className='relative aspect-square overflow-hidden rounded-lg'>
           <Image
             src={imageUrl}
@@ -34,13 +33,15 @@ export default function MusicCard({
             <span className='block text-white text-sm truncate'>{artist}</span>
           </div>
         </div>
-      </Link>
+      </div>
     </div>
   );
 
   const renderDefault = () => (
-    <div className={`bg-white rounded-lg shadow-sm ${className}`}>
-      <Link href={`/music/${id}`} className='block'>
+    <div
+      className={`bg-white rounded-lg shadow-sm cursor-pointer ${className}`}
+    >
+      <div className='block'>
         <div className='relative aspect-square overflow-hidden rounded-t-lg'>
           <Image
             src={imageUrl}
@@ -53,7 +54,7 @@ export default function MusicCard({
           <h3 className='font-semibold text-gray-900 mb-1 truncate'>{title}</h3>
           <p className='text-gray-600 text-sm truncate'>{artist}</p>
         </div>
-      </Link>
+      </div>
     </div>
   );
 
