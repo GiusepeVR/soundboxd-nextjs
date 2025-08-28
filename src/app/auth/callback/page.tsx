@@ -12,7 +12,6 @@ export default function AuthCallback() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // Get URL parameters from the current URL
         const urlParams = new URLSearchParams(window.location.search);
 
         const code = urlParams.get('code');
@@ -30,10 +29,8 @@ export default function AuthCallback() {
           return;
         }
 
-        // Exchange code for tokens
         const tokenData = await spotifyAuth.exchangeCodeForToken(code);
 
-        // Store tokens in localStorage (in production, use secure HTTP-only cookies)
         localStorage.setItem('spotify_access_token', tokenData.access_token);
         localStorage.setItem('spotify_refresh_token', tokenData.refresh_token);
         localStorage.setItem(
@@ -41,7 +38,6 @@ export default function AuthCallback() {
           (Date.now() + tokenData.expires_in * 1000).toString()
         );
 
-        // Redirect to dashboard
         router.push('/dashboard');
       } catch (err) {
         console.error('Auth callback error:', err);

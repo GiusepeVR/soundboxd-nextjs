@@ -11,7 +11,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // For PKCE flow, we don't need client secret - just client ID
     const clientId = 'ec1ead665ba54a1c819788728c479239';
 
     if (!clientId) {
@@ -21,7 +20,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Exchange authorization code for access token using PKCE
     const tokenResponse = await fetch(
       'https://accounts.spotify.com/api/token',
       {
@@ -50,7 +48,6 @@ export async function POST(request: NextRequest) {
 
     const tokenData = await tokenResponse.json();
 
-    // Get user profile
     const profileResponse = await fetch('https://api.spotify.com/v1/me', {
       headers: {
         Authorization: `Bearer ${tokenData.access_token}`,
