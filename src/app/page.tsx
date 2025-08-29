@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components';
 import { MusicCard } from '@/components';
+import { useUser } from '@/components/context/UserContext';
 import { useRouter } from 'next/navigation';
 import deezer from '@/utils/deezer';
 
@@ -35,6 +36,7 @@ const genres = ['Pop', 'Rock', 'Rap', 'Electronic', 'Alternative'];
 
 export default function Home() {
   const router = useRouter();
+  const { isUserLoggedIn } = useUser();
   const [topFiveAlbums, setTopFiveAlbums] = useState<Album[]>([]);
   const [selectedGenre, setSelectedGenre] = useState('Pop');
   const [trendingTracks, setTrendingTracks] = useState<Track[]>([]);
@@ -69,6 +71,14 @@ export default function Home() {
     }
   };
 
+  const handleRedirect = (isLoggedIn: boolean) => {
+    if (!isLoggedIn) {
+      router.push('/login');
+    } else {
+      router.push('/dashboard');
+    }
+  };
+
   useEffect(() => {
     fetchTrendingTracks(selectedGenre);
   }, [selectedGenre]);
@@ -100,9 +110,9 @@ export default function Home() {
               variant='primary'
               size='lg'
               className='z-50'
-              onClick={() => router.push('/login')}
+              onClick={() => handleRedirect(isUserLoggedIn)}
             >
-              Get Started
+              {isUserLoggedIn ? 'View my music' : 'Get Started'}
             </Button>
           </div>
 
@@ -253,9 +263,9 @@ export default function Home() {
           variant='primary'
           size='lg'
           className='z-50'
-          onClick={() => router.push('/login')}
+          onClick={() => handleRedirect(isUserLoggedIn)}
         >
-          Get Started
+          {isUserLoggedIn ? 'View my music' : 'Get Started'}
         </Button>
         <div className='absolute top-1/3 -left-24 w-96 h-96 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-full blur-3xl z-10' />
         <div className='absolute top-1/3 -right-24 w-[500px] h-[500px] bg-gradient-to-br from-yellow-400/40 via-orange-300/30 to-transparent rounded-full blur-3xl z-10' />
