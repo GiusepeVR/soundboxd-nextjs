@@ -28,7 +28,7 @@ NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_DEV=http://127.0.0.1:3000/auth/callback
 NEXT_PUBLIC_SPOTIFY_REDIRECT_URI_PROD=https://yourdomain.com/auth/callback
 ```
 
-**Note:** Replace `https://yourdomain.com` with your actual production domain when deploying.
+**Note:** Replace `https://yourdomain.com` with your actual production domain when deploying. SPOTIFY OAUTH2.0 IS LIMITED TO 25 USERS IN DEVELOPMENT MODE. PLEASE SUBMIT A VALID EMAIL LINKED TO AN ACTIVE SPOTIFY ACCOUNT TO: giusepe.vr@gmail.com IN ORDER TO TEST AUTHENTICATION FLOW. 
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
