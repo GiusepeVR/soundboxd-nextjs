@@ -5,65 +5,32 @@ import { Button } from '@/components';
 import { MusicCard } from '@/components';
 import { useUser } from '@/components/context/UserContext';
 import { useRouter } from 'next/navigation';
-import deezer from '@/utils/deezer';
-
-interface Track {
-  id: number;
-  title: string;
-  artist: {
-    name: string;
-  };
-  album: {
-    title: string;
-    cover_medium: string;
-    cover_big?: string;
-    cover_xl?: string;
-  };
-  preview: string;
-}
-
-interface Album {
-  id?: number;
-  title?: string;
-  artist?: { name?: string };
-  cover?: string;
-  cover_medium?: string;
-  cover_big?: string;
-  cover_xl?: string;
-}
+import { Reorder } from 'framer-motion';
+import {
+  useTopFiveAlbums,
+  useTrendingTracks,
+  type Album,
+  type Track,
+} from '@/hooks/useDeezerData';
 
 const genres = ['Pop', 'Rock', 'Rap', 'Electronic', 'Alternative'];
 
 export default function Home() {
   const router = useRouter();
   const { isUserLoggedIn } = useUser();
-  const [topFiveAlbums, setTopFiveAlbums] = useState<Album[]>([]);
   const [selectedGenre, setSelectedGenre] = useState('Pop');
-  const [trendingTracks, setTrendingTracks] = useState<Track[]>([]);
-  const [trendingLoading, setTrendingLoading] = useState(false);
+  const [reorderedAlbums, setReorderedAlbums] = useState<Album[]>([]);
 
-  const hasTopFive = topFiveAlbums && topFiveAlbums.length >= 5;
+  const { data: topFiveAlbums = [], isLoading: topFiveLoading } =
+    useTopFiveAlbums();
+  const { data: trendingTracks = [], isLoading: trendingLoading } =
+    useTrendingTracks(selectedGenre);
 
-  const fetchTrendingTracks = async (genre: string) => {
-    setTrendingLoading(true);
-    try {
-      const result = await deezer.getTopTracksByGenreName(genre);
-      if (
-        result?.data &&
-        Array.isArray(result.data) &&
-        result.data.length > 0
-      ) {
-        setTrendingTracks(result.data);
-      } else {
-        setTrendingTracks([]);
-      }
-    } catch (error) {
-      console.error('Error fetching trending tracks:', error);
-      setTrendingTracks([]);
-    } finally {
-      setTrendingLoading(false);
-    }
-  };
+  useEffect(() => {
+    setReorderedAlbums(topFiveAlbums);
+  }, [topFiveAlbums]);
+
+  const hasTopFive = reorderedAlbums && reorderedAlbums.length >= 5;
 
   const handleGenreClick = (genre: string) => {
     if (genre !== selectedGenre) {
@@ -78,24 +45,6 @@ export default function Home() {
       router.push('/dashboard');
     }
   };
-
-  useEffect(() => {
-    fetchTrendingTracks(selectedGenre);
-  }, [selectedGenre]);
-
-  useEffect(() => {
-    const fetchTopFive = async () => {
-      try {
-        const result = await deezer.getTopFive();
-        setTopFiveAlbums(result?.albums?.data || []);
-      } catch (error) {
-        console.error('Error fetching top charts:', error);
-        setTopFiveAlbums([]);
-      }
-    };
-
-    fetchTopFive();
-  }, []);
 
   return (
     <div className='p-8 bg-white flex flex-col overflow-hidden'>
@@ -118,68 +67,68 @@ export default function Home() {
 
           {hasTopFive && (
             <div className='absolute flex items-center justify-center top-1/8'>
-              <div className='flex items-center space-x-4'>
-                {topFiveAlbums.slice(0, 5).map(
-                  (
-                    album: {
-                      id?: number;
-                      title?: string;
-                      artist?: { name?: string };
-                      cover?: string;
-                      cover_medium?: string;
-                      cover_big?: string;
-                      cover_xl?: string;
+              <Reorder.Group
+                axis='x'
+                values={reorderedAlbums}
+                onReorder={setReorderedAlbums}
+                className='flex items-center space-x-4'
+              >
+                {reorderedAlbums.map((album, index) => {
+                  const coverFlowConfig = [
+                    {
+                      wrapper: 'transform -rotate-12 scale-75 opacity-80',
+                      size: 'w-32 h-32',
                     },
-                    index: number
-                  ) => {
-                    const coverFlowConfig = [
-                      {
-                        wrapper: 'transform -rotate-12 scale-75 opacity-80',
-                        size: 'w-32 h-32',
-                      },
-                      {
-                        wrapper: 'transform -rotate-6 scale-90 opacity-90',
-                        size: 'w-40 h-40',
-                      },
-                      {
-                        wrapper: 'transform scale-110 z-10',
-                        size: 'w-56 h-56',
-                      },
-                      {
-                        wrapper: 'transform rotate-6 scale-90 opacity-90',
-                        size: 'w-40 h-40',
-                      },
-                      {
-                        wrapper: 'transform rotate-12 scale-75 opacity-80',
-                        size: 'w-32 h-32',
-                      },
-                    ];
-                    const cfg = coverFlowConfig[index] || coverFlowConfig[2];
-                    const imageUrl =
-                      album?.cover_big ||
-                      album?.cover_xl ||
-                      album?.cover_medium ||
-                      album?.cover ||
-                      '/static/albums/fallback.jpeg';
-                    const title = album?.title || 'Unknown Album';
-                    const artist = album?.artist?.name || 'Unknown Artist';
-                    const id = String(album?.id ?? index);
+                    {
+                      wrapper: 'transform -rotate-6 scale-90 opacity-90',
+                      size: 'w-40 h-40',
+                    },
+                    { wrapper: 'transform scale-110 z-10', size: 'w-56 h-56' },
+                    {
+                      wrapper: 'transform rotate-6 scale-90 opacity-90',
+                      size: 'w-40 h-40',
+                    },
+                    {
+                      wrapper: 'transform rotate-12 scale-75 opacity-80',
+                      size: 'w-32 h-32',
+                    },
+                  ];
+                  const cfg = coverFlowConfig[index] || coverFlowConfig[2];
 
-                    return (
-                      <div key={id} className={cfg.wrapper}>
-                        <MusicCard
-                          id={id}
-                          title={title}
-                          artist={artist}
-                          imageUrl={imageUrl}
-                          className={cfg.size}
-                          variant='minimal'
-                        />
-                      </div>
-                    );
-                  }
-                )}
-              </div>
+                  const imageUrl =
+                    album?.cover_big ||
+                    album?.cover_xl ||
+                    album?.cover_medium ||
+                    album?.cover ||
+                    '/static/albums/fallback.jpeg';
+                  const title = album?.title || 'Unknown Album';
+                  const artist = album?.artist?.name || 'Unknown Artist';
+                  const id = String(album?.id ?? `${title}-${index}`);
+
+                  return (
+                    <Reorder.Item
+                      key={id}
+                      value={album}
+                      className={cfg.wrapper}
+                      whileDrag={{ scale: 1.1, zIndex: 20 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 300,
+                        damping: 30,
+                      }}
+                    >
+                      <MusicCard
+                        id={id}
+                        title={title}
+                        artist={artist}
+                        imageUrl={imageUrl}
+                        className={cfg.size}
+                        variant='minimal'
+                      />
+                    </Reorder.Item>
+                  );
+                })}
+              </Reorder.Group>
             </div>
           )}
         </div>
