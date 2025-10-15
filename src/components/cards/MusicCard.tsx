@@ -18,7 +18,7 @@ export default function MusicCard({
   variant = 'default',
 }: MusicCardProps) {
   const renderMinimal = () => (
-    <div className={`relative group cursor-pointer ${className}`}>
+    <div className={`relative group cursor-pointer ${className}`} data-id={id}>
       <div className='block'>
         <div className='relative aspect-square overflow-hidden rounded-lg'>
           <Image
@@ -40,6 +40,7 @@ export default function MusicCard({
   const renderDefault = () => (
     <div
       className={`bg-white rounded-lg shadow-sm cursor-pointer ${className}`}
+      data-id={id}
     >
       <div className='block'>
         <div className='relative aspect-square overflow-hidden rounded-t-lg'>

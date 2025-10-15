@@ -10,7 +10,6 @@ import {
   useTopFiveAlbums,
   useTrendingTracks,
   type Album,
-  type Track,
 } from '@/hooks/useDeezerData';
 
 const genres = ['Pop', 'Rock', 'Rap', 'Electronic', 'Alternative'];
@@ -21,8 +20,7 @@ export default function Home() {
   const [selectedGenre, setSelectedGenre] = useState('Pop');
   const [reorderedAlbums, setReorderedAlbums] = useState<Album[]>([]);
 
-  const { data: topFiveAlbums = [], isLoading: topFiveLoading } =
-    useTopFiveAlbums();
+  const { data: topFiveAlbums = [] } = useTopFiveAlbums();
   const { data: trendingTracks = [], isLoading: trendingLoading } =
     useTrendingTracks(selectedGenre);
 
