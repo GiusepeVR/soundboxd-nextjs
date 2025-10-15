@@ -4,9 +4,17 @@ import MusicCard from '@/components/cards/MusicCard';
 
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, fill, ...props }: any) => (
-    <img src={src} alt={alt} {...(fill ? {} : props)} />
-  ),
+  default: ({
+    src,
+    alt,
+    fill,
+    ...props
+  }: {
+    src: string;
+    alt: string;
+    fill?: boolean;
+    [key: string]: unknown;
+  }) => <img src={src} alt={alt} {...(fill ? {} : props)} />,
 }));
 
 describe('MusicCard Component', () => {
@@ -153,6 +161,15 @@ describe('MusicCard Component', () => {
         'h-full'
       );
     });
+
+    it('includes id as data attribute in minimal variant', () => {
+      const { container } = render(
+        <MusicCard {...defaultProps} variant='minimal' />
+      );
+
+      const cardElement = container.firstChild as HTMLElement;
+      expect(cardElement).toHaveAttribute('data-id', 'test-id');
+    });
   });
 
   describe('Props Validation', () => {
@@ -210,12 +227,19 @@ describe('MusicCard Component', () => {
       const cardElement = container.firstChild as HTMLElement;
       expect(cardElement).toHaveClass('cursor-pointer');
     });
+
+    it('includes id as data attribute', () => {
+      const { container } = render(<MusicCard {...defaultProps} />);
+
+      const cardElement = container.firstChild as HTMLElement;
+      expect(cardElement).toHaveAttribute('data-id', 'test-id');
+    });
   });
 
   describe('Edge Cases', () => {
     it('handles undefined className gracefully', () => {
       const { container } = render(
-        <MusicCard {...defaultProps} className={undefined as any} />
+        <MusicCard {...defaultProps} className={undefined as string} />
       );
 
       const cardElement = container.firstChild as HTMLElement;
